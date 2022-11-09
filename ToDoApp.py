@@ -83,7 +83,7 @@ class Ui_MainWindow(object):
                 self.status = "Done"
 
         self.tasks = []
-
+        self.deleted_tasks = []
         def strike_out_font():
             if self.DoneCheckBox.isChecked() == True:
                 font = self.ListTasks.currentItem().font()
@@ -95,7 +95,8 @@ class Ui_MainWindow(object):
                 task = self.InsertTask.text()
                 for t in self.tasks:
                     if t.task == task:
-                        raise Exception("Duplicated task.")
+                        if t.task not in self.deleted_tasks:
+                            raise Exception("Duplicated task.")
                 self.tasks.append(Task(task,'To do'))
                 self.ListTasks.addItem(QListWidgetItem(self.tasks[len(self.tasks)-1].task))
             except:
@@ -107,6 +108,7 @@ class Ui_MainWindow(object):
                 self.DoneCheckBox.setChecked(True)
                 self.ToDoCheckBox.setChecked(True)
                 self.InProgressCheckBox.setChecked(True)
+                self.deleted_tasks.append(self.tasks[current_row].task)
             if self.tasks[current_row].status == 'In progress':
                 self.ToDoCheckBox.setChecked(True)
                 self.InProgressCheckBox.setChecked(True)
@@ -115,7 +117,6 @@ class Ui_MainWindow(object):
                 self.ToDoCheckBox.setChecked(True)
                 self.InProgressCheckBox.setChecked(False)
                 self.DoneCheckBox.setChecked(False)
-
         def set_status():
             current_row = self.ListTasks.currentRow() # starting from 0
             if self.ToDoCheckBox.isChecked()==True and self.InProgressCheckBox.isChecked()==False and self.DoneCheckBox.isChecked()==False:
