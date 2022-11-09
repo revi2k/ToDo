@@ -62,6 +62,13 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        def error(errorType): # error function, popup window with error type
+                msg = QMessageBox()
+                msg.setWindowTitle("Error")
+                msg.setText(errorType)
+                x = msg.exec_()
+                return x    
+
         class Task:
             def __init__(self, task, status):
                 self.task = task
@@ -77,7 +84,6 @@ class Ui_MainWindow(object):
 
         self.tasks = []
 
-
         def strike_out_font():
             if self.DoneCheckBox.isChecked() == True:
                 font = self.ListTasks.currentItem().font()
@@ -85,9 +91,15 @@ class Ui_MainWindow(object):
                 self.ListTasks.currentItem().setFont(font)
 
         def insertTask():
-            task = self.InsertTask.text()
-            self.tasks.append(Task(task,'To do'))
-            self.ListTasks.addItem(QListWidgetItem(self.tasks[len(self.tasks)-1].task))
+            try:
+                task = self.InsertTask.text()
+                for t in self.tasks:
+                    if t.task == task:
+                        raise Exception("Duplicated task.")
+                self.tasks.append(Task(task,'To do'))
+                self.ListTasks.addItem(QListWidgetItem(self.tasks[len(self.tasks)-1].task))
+            except:
+                error("Duplicated task!")
 
         def check_status():
             current_row = self.ListTasks.currentRow() # starting from 0
