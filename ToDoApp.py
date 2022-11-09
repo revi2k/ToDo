@@ -77,6 +77,13 @@ class Ui_MainWindow(object):
 
         self.tasks = []
 
+
+        def strike_out_font():
+            if self.DoneCheckBox.isChecked() == True:
+                font = self.ListTasks.currentItem().font()
+                font.setStrikeOut(True)
+                self.ListTasks.currentItem().setFont(font)
+
         def insertTask():
             task = self.InsertTask.text()
             self.tasks.append(Task(task,'To do'))
@@ -88,7 +95,6 @@ class Ui_MainWindow(object):
                 self.DoneCheckBox.setChecked(True)
                 self.ToDoCheckBox.setChecked(True)
                 self.InProgressCheckBox.setChecked(True)
-
             if self.tasks[current_row].status == 'In progress':
                 self.ToDoCheckBox.setChecked(True)
                 self.InProgressCheckBox.setChecked(True)
@@ -97,7 +103,6 @@ class Ui_MainWindow(object):
                 self.ToDoCheckBox.setChecked(True)
                 self.InProgressCheckBox.setChecked(False)
                 self.DoneCheckBox.setChecked(False)
-
 
         def set_status():
             current_row = self.ListTasks.currentRow() # starting from 0
@@ -112,9 +117,9 @@ class Ui_MainWindow(object):
         self.ListTasks.currentItemChanged.connect(check_status)
         
         self.DoneCheckBox.stateChanged.connect(set_status)
+        self.DoneCheckBox.stateChanged.connect(strike_out_font)
         self.InProgressCheckBox.stateChanged.connect(set_status)
         self.ToDoCheckBox.stateChanged.connect(set_status)
-        
         self.InsertButton.clicked.connect(insertTask)
 
 
