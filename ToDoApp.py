@@ -85,9 +85,10 @@ class Ui_MainWindow(object):
         def check_status():
             current_row = self.ListTasks.currentRow() # starting from 0
             if self.tasks[current_row].status == 'Done':
+                self.DoneCheckBox.setChecked(True)
                 self.ToDoCheckBox.setChecked(True)
                 self.InProgressCheckBox.setChecked(True)
-                self.DoneCheckBox.setChecked(True)
+
             if self.tasks[current_row].status == 'In progress':
                 self.ToDoCheckBox.setChecked(True)
                 self.InProgressCheckBox.setChecked(True)
@@ -100,7 +101,7 @@ class Ui_MainWindow(object):
 
         def set_status():
             current_row = self.ListTasks.currentRow() # starting from 0
-            if self.ToDoCheckBox.isChecked()==True and self.InProgressCheckBox.isChecked()==False:
+            if self.ToDoCheckBox.isChecked()==True and self.InProgressCheckBox.isChecked()==False and self.DoneCheckBox.isChecked()==False:
                 self.tasks[current_row].status_to_do()
             elif self.InProgressCheckBox.isChecked()==True and self.ToDoCheckBox.isChecked()==True and self.DoneCheckBox.isChecked()==False:
                 self.tasks[current_row].status_in_progress()
